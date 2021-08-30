@@ -1,10 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,7 +69,33 @@ class RestaurantTest {
 
         assertThrows(itemNotFoundException.class,
                 ()->restaurant.removeFromMenu("French fries"));
-        
+
     }
+
+    @Test
+    public void get_total_price_when_user_selects_all_items(){
+        assertEquals(388,restaurant.getTotalPrice(restaurant.getMenu()));
+    }
+
+
+    @Test
+    public void get_total_price_of_selected_items() {
+
+        restaurant.addToMenu("Fried Rice", 90);
+        restaurant.addToMenu("Omlette", 269);
+        restaurant.addToMenu("Parotta", 100);
+
+        List<Item> items = restaurant.getMenu();
+        List<Item> selectedItems = new ArrayList<>();
+        selectedItems.add(items.get(2));
+        selectedItems.add(items.get(4));
+        assertEquals(190,restaurant.getTotalPrice(selectedItems));
+    }
+
+    @Test
+    public void get_total_price_as_zero_when_no_items_selected(){
+        assertEquals(0,restaurant.getTotalPrice(new ArrayList<Item>()));
+    }
+    
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
